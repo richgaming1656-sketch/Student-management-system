@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Management Dashboard</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f3f4f6;
+            color: #111827;
+        }
+
+        .header {
+            background: #111827;
+            color: white;
+            padding: 28px 20px;
+        }
+
+        .header-content {
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 30px;
+        }
+
+        .header p {
+            margin: 8px 0 0;
+            color: #cbd5e1;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 25px auto;
+            padding: 0 15px;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat {
+            background: white;
+            padding: 22px;
+            border-radius: 15px;
+            box-shadow: 0 5px 18px rgba(0,0,0,0.07);
+        }
+
+        .stat-icon {
+            font-size: 28px;
+        }
+
+        .stat h3 {
+            margin: 10px 0 5px;
+            font-size: 15px;
+            color: #6b7280;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .extra-dashboard {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 22px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 18px rgba(0,0,0,0.07);
+        }
+
+        h2 {
+            margin-top: 0;
+        }
+
+        .top-list {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+
+        .top-list li {
+            padding: 12px;
+            margin-bottom: 8px;
+            background: #f9fafb;
+            border-radius: 9px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .pass {
+            color: #15803d;
+            font-weight: bold;
+        }
+
+        .fail {
+            color: #dc2626;
+            font-weight: bold;
+        }
+
+        .chart {
+            margin-top: 15px;
+        }
+
+        .bar-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 12px 0;
+        }
+
+        .bar-name {
+            width: 100px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .bar-container {
+            flex: 1;
+            background: #e5e7eb;
+            height: 24px;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .bar {
+            height: 100%;
+            background: #2563eb;
+            border-radius: 20px;
+        }
+
+        .bar-marks {
+            width: 45px;
+            font-weight: bold;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 13px;
+            margin: 6px 0;
+            border: 1px solid #d1d5db;
+            border-radius: 9px;
+            font-size: 15px;
+            background: white;
+        }
+
+        button {
+            border: 0;
+            padding: 11px 16px;
+            border-radius: 9px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .add-btn {
+            width: 100%;
+            margin-top: 8px;
+            background: #111827;
+            color: white;
+        }
+
+        .search-row {
+            display: grid;
+            grid-template-columns: 1fr 160px 90px;
+            gap: 8px;
+        }
+
+        .search-row input,
+        .search-row select {
+            margin: 0;
+        }
+
+        .search-btn {
+            background: #2563eb;
+            color: white;
+        }
+
+        .clear-btn {
+            background: #e5e7eb;
+            color: #111827;
+            text-decoration: none;
+            display: inline-block;
+            padding: 11px 16px;
+            border-radius: 9px;
+            font-weight: bold;
+        }
+
+        .student {
+            border: 1px solid #e5e7eb;
+            padding: 18px;
+            margin-top: 12px;
+            border-radius: 13px;
+            background: #fafafa;
+        }
+
+        .student h3 {
+            margin: 0 0 10px;
+            font-size: 20px;
+        }
+
+        .info {
+            line-height: 1.8;
+        }
+
+        .grade {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            background: #e0e7ff;
+            font-weight: bold;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .edit {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .delete {
+            background: #dc2626;
+            color: white;
+        }
+
+        .empty {
+            text-align: center;
+            color: #6b7280;
+            padding: 25px;
+        }
+
+        @media (max-width: 700px) {
+
+            .dashboard,
+            .extra-dashboard {
+                grid-template-columns: 1fr;
+            }
+
+            .search-row {
+                grid-template-columns: 1fr;
+            }
+
+            .search-btn {
+                width: 100%;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="header">
+
+    <div class="header-content">
+
+        <h1>🎓 Student Management</h1>
+
+        <p>Python • Flask • SQLite Dashboard</p>
+
+    </div>
+
+</div>
+
+
+<div class="container">
+
+
+    <!-- MAIN DASHBOARD -->
+
+    <div class="dashboard">
+
+
+        <div class="stat">
+
+            <div class="stat-icon">👨‍🎓</div>
+
+            <h3>Total Students</h3>
+
+            <div class="stat-value">
+                {{ total_students }}
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="stat-icon">📈</div>
+
+            <h3>Average Marks</h3>
+
+            <div class="stat-value">
+                {{ average_marks }}
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="stat-icon">🏆</div>
+
+            <h3>Topper</h3>
+
+            {% if topper %}
+
+            <div class="stat-value" style="font-size:20px;">
+                {{ topper.name }}
+            </div>
+
+            <small>
+                {{ topper.marks }}/100
+            </small>
+
+            {% else %}
+
+            <div class="stat-value">
+                -
+            </div>
+
+            {% endif %}
+
+        </div>
+
+
+    </div>
+
+
+    <!-- EXTRA STATS -->
+
+    <div class="extra-dashboard">
+
+
+        <div class="stat">
+
+            <div class="stat-icon">⬆️</div>
+
+            <h3>Highest Marks</h3>
+
+            <div class="stat-value">
+                {{ highest_marks }}
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="stat-icon">⬇️</div>
+
+            <h3>Lowest Marks</h3>
+
+            <div class="stat-value">
+                {{ lowest_marks }}
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="stat-icon">✅ ❌</div>
+
+            <h3>Pass / Fail</h3>
+
+            <div>
+                <span class="pass">
+                    {{ pass_count }} Pass
+                </span>
+
+                &nbsp; / &nbsp;
+
+                <span class="fail">
+                    {{ fail_count }} Fail
+                </span>
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- TOP 3 -->
+
+    <div class="card">
+
+        <h2>🏆 Top 3 Students</h2>
+
+        {% if top_students %}
+
+        <ol class="top-list">
+
+            {% for student in top_students %}
+
+            <li>
+
+                <span>
+                    {% if loop.index == 1 %}
+                    🥇
+                    {% elif loop.index == 2 %}
+                    🥈
+                    {% else %}
+                    🥉
+                    {% endif %}
+
+                    {{ student.name }}
+                </span>
+
+                <b>
+                    {{ student.marks }}/100
+                </b>
+
+            </li>
+
+            {% endfor %}
+
+        </ol>
+
+        {% else %}
+
+        <div class="empty">
+            No students available.
+        </div>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- MARKS CHART -->
+
+    <div class="card">
+
+        <h2>📊 Marks Chart</h2>
+
+        {% if students %}
+
+        <div class="chart">
+
+            {% for student in students %}
+
+            <div class="bar-row">
+
+                <div class="bar-name">
+                    {{ student.name }}
+                </div>
+
+                <div class="bar-container">
+
+                    <div
+                        class="bar"
+                        style="width: {{ student.marks }}%;"
+                    ></div>
+
+                </div>
+
+                <div class="bar-marks">
+                    {{ student.marks }}
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        {% else %}
+
+        <div class="empty">
+            Add students to see the chart.
+        </div>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- ADD STUDENT -->
+
+    <div class="card">
+
+        <h2>➕ Add Student</h2>
+
+        <form action="/add" method="POST">
+
+            <input
+                type="text"
+                name="name"
+                placeholder="Student Name"
+                required
+            >
+
+            <input
+                type="number"
+                name="age"
+                placeholder="Age"
+                min="1"
+                required
+            >
+
+            <input
+                type="text"
+                name="course"
+                placeholder="Course"
+                required
+            >
+
+            <input
+                type="number"
+                name="marks"
+                placeholder="Marks out of 100"
+                min="0"
+                max="100"
+                required
+            >
+
+            <button
+                class="add-btn"
+                type="submit"
+            >
+                ➕ Add Student
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- SEARCH & SORT -->
+
+    <div class="card">
+
+        <h2>🔎 Search & Sort</h2>
+
+        <form action="/" method="GET">
+
+            <div class="search-row">
+
+                <input
+                    type="text"
+                    name="search"
+                    value="{{ search }}"
+                    placeholder="Search name or course"
+                >
+
+                <select name="sort">
+
+                    <option value="id"
+                    {% if sort == "id" %}selected{% endif %}>
+                        Latest
+                    </option>
+
+                    <option value="name"
+                    {% if sort == "name" %}selected{% endif %}>
+                        Name A-Z
+                    </option>
+
+                    <option value="marks_high"
+                    {% if sort == "marks_high" %}selected{% endif %}>
+                        Marks High-Low
+                    </option>
+
+                    <option value="marks_low"
+                    {% if sort == "marks_low" %}selected{% endif %}>
+                        Marks Low-High
+                    </option>
+
+                    <option value="age"
+                    {% if sort == "age" %}selected{% endif %}>
+                        Age
+                    </option>
+
+                </select>
+
+                <button
+                    class="search-btn"
+                    type="submit"
+                >
+                    Search
+                </button>
+
+            </div>
+
+        </form>
+
+        <br>
+
+        <a
+            href="/"
+            class="clear-btn"
+        >
+            Clear Search
+        </a>
+
+    </div>
+
+
+    <!-- STUDENTS -->
+
+    <div class="card">
+
+        <h2>👨‍🎓 Students</h2>
+
+
+        {% for student in students %}
+
+        {% set percentage = student.marks %}
+
+
+        <div class="student">
+
+            <h3>
+                {{ student.name }}
+            </h3>
+
+
+            <div class="info">
+
+                <b>ID:</b>
+                {{ student.id }}
+                <br>
+
+                <b>Age:</b>
+                {{ student.age }}
+                <br>
+
+                <b>Course:</b>
+                {{ student.course }}
+                <br>
+
+                <b>Marks:</b>
+                {{ student.marks }}/100
+                <br>
+
+                <b>Percentage:</b>
+                {{ percentage }}%
+
+            </div>
+
+
+            {% if percentage >= 90 %}
+
+                <span class="grade">
+                    Grade: A+
+                </span>
+
+            {% elif percentage >= 80 %}
+
+                <span class="grade">
+                    Grade: A
+                </span>
+
+            {% elif percentage >= 70 %}
+
+                <span class="grade">
+                    Grade: B+
+                </span>
+
+            {% elif percentage >= 60 %}
+
+                <span class="grade">
+                    Grade: B
+                </span>
+
+            {% elif percentage >= 50 %}
+
+                <span class="grade">
+                    Grade: C
+                </span>
+
+            {% elif percentage >= 35 %}
+
+                <span class="grade">
+                    Grade: D
+                </span>
+
+            {% else %}
+
+                <span class="grade">
+                    Grade: F — Fail
+                </span>
+
+            {% endif %}
+
+
+            <div class="actions">
+
+                <form
+                    action="/edit/{{ student.id }}"
+                    method="GET"
+                >
+
+                    <button
+                        class="edit"
+                        type="submit"
+                    >
+                        ✏️ Edit
+                    </button>
+
+                </form>
+
+
+                <form
+                    action="/delete/{{ student.id }}"
+                    method="POST"
+                >
+
+                    <button
+                        class="delete"
+                        type="submit"
+                    >
+                        🗑️ Delete
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+
+        {% else %}
+
+        <div class="empty">
+            No students found.
+        </div>
+
+        {% endfor %}
+
+
+    </div>
+
+
+</div>
+
+
+</body>
+
+</html>

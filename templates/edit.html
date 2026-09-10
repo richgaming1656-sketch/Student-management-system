@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Student</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #f2f2f2;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 7px 0;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>✏️ Edit Student</h1>
+
+    <form action="/update/{{ student.id }}" method="POST">
+
+        <input type="text" name="name"
+               value="{{ student.name }}" required>
+
+        <input type="number" name="age"
+               value="{{ student.age }}" required>
+
+        <input type="text" name="course"
+               value="{{ student.course }}" required>
+
+        <input type="number" name="marks"
+               value="{{ student.marks }}" required>
+
+        <button type="submit">💾 Update Student</button>
+
+    </form>
+
+</div>
+
+</body>
+</html>
